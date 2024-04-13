@@ -1,6 +1,7 @@
 import express, { json } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userroute.js";
 import authRoutes from "./routes/authroute.js";
 
@@ -9,7 +10,10 @@ dotenv.config();
 const DB_URL = process.env.MONGO_URI;
 
 const app = express();
+
 app.use(express.json());
+app.use(cookieParser());
+
 const PORT = process.env.PORT || 8080;
 
 mongoose
