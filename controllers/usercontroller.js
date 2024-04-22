@@ -2,10 +2,6 @@ import bcryptjs from "bcryptjs";
 import { ErrorHandler } from "../utils/error.js";
 import User from "../models/usermodel.js";
 
-export const test = (req, res) => {
-  res.send("Test api is working");
-};
-
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.userId) {
     return next(ErrorHandler(403, "You are not allowed to update the user"));
@@ -36,21 +32,44 @@ export const updateUser = async (req, res, next) => {
         ErrorHandler(400, "username only contains letters and numbers only")
       );
     }
-    try {
-      const updateUser = await User.findByIdAndUpdate(
-        req.params.userId,
-        {
-          $set: {
-            username: req.body.username,
-            emil: req.body.email,
-            password: req.body.password,
-            profilePic: req.body.profilePic,
-          },
-        },
-        { new: true }
-      );
-    } catch (error) {
-      next(error);
+  }
+  try {
+    const updateUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      {
+        $set: {
+          username: req.body.username,
+          emil: req.body.email,
+          password: req.body.password,
+          profilePic: req.body.profilePic
+        }
+      },
+      { new: true }
+    );
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      data: updateUser
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const DeleteUser = async (req, res, next) => {
+  try {
+    if (!req.params.userId) {
+      return next(ErrorHandler(400, "userId is required"));
     }
+    if (req.user.id !== req.params.userId) {
+      return next(ErrorHandler(403, "You are not allowed to delete the user"));
+    }
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully"
+    });
+  } catch (error) {
+    next(error);
   }
 };
