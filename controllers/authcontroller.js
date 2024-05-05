@@ -15,7 +15,7 @@ export const SignUp = async (req, res, next) => {
   const newUser = new User({
     username,
     email,
-    password: hashedPassword,
+    password: hashedPassword
   });
 
   try {
@@ -44,6 +44,7 @@ export const SignIn = async (req, res, next) => {
     const token = jwt.sign(
       {
         id: validUser._id,
+        isAdmin: validUser.isAdmin
       },
       process.env.JWT_SECRET
     );
@@ -53,7 +54,7 @@ export const SignIn = async (req, res, next) => {
     res
       .status(200)
       .cookie("access_token", token, {
-        httpOnly: true,
+        httpOnly: true
       })
       .json(rest);
   } catch (error) {
@@ -70,6 +71,7 @@ export const GoogleAuth = async (req, res, next) => {
       const token = jwt.sign(
         {
           id: user._id,
+          isAdmin: user.isAdmin
         },
         process.env.JWT_SECRET
       );
@@ -77,7 +79,7 @@ export const GoogleAuth = async (req, res, next) => {
       res
         .status(200)
         .cookie("access_token", token, {
-          httpOnly: true,
+          httpOnly: true
         })
         .json(rest);
     } else {
@@ -91,15 +93,18 @@ export const GoogleAuth = async (req, res, next) => {
           Math.random().toString(9).slice(-4),
         email,
         password: hashPassword,
-        profilePic: googlePhotoUrl,
+        profilePic: googlePhotoUrl
       });
       await newUser.save();
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      const token = jwt.sign(
+        { id: newUser._id, isAdmin: newUser.isAdmin },
+        process.env.JWT_SECRET
+      );
       const { password, ...rest } = newUser._doc;
       res
         .status(200)
         .cookie("access_token", token, {
-          httpOnly: true,
+          httpOnly: true
         })
         .json(rest);
     }
