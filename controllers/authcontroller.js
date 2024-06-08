@@ -48,9 +48,7 @@ export const SignIn = async (req, res, next) => {
       },
       process.env.JWT_SECRET
     );
-
     const { password: pass, ...rest } = validUser._doc;
-
     res
       .status(200)
       .cookie("access_token", token, {
