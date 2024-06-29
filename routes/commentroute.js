@@ -2,8 +2,10 @@ import express from "express";
 import VerifyToken from "../utils/verifyUser.js";
 import {
   CreateComment,
+  EditComment,
   GetComments,
-  LikeComment
+  LikeComment,
+  DeleteComment
 } from "../controllers/commentcontroller.js";
 
 const commentRouter = express.Router();
@@ -11,5 +13,7 @@ const commentRouter = express.Router();
 commentRouter.post("/create", VerifyToken, CreateComment);
 commentRouter.get("/getPostComments/:postId", GetComments);
 commentRouter.put("/likeComment/:commentId", VerifyToken, LikeComment);
+commentRouter.put("/editComment/:commentId", VerifyToken, EditComment);
+commentRouter.delete("/delete/:commentId", VerifyToken, DeleteComment);
 
 export default commentRouter;
