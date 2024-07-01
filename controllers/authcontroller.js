@@ -20,7 +20,7 @@ export const SignUp = async (req, res, next) => {
 
   try {
     await newUser.save();
-    res.json("Signup Successful");
+    res.json(newUser);
   } catch (error) {
     next(error);
   }
@@ -54,7 +54,7 @@ export const SignIn = async (req, res, next) => {
       .cookie("access_token", token, {
         httpOnly: true
       })
-      .json(rest);
+      .json({ ...rest, token });
   } catch (error) {
     next(error);
   }
@@ -104,7 +104,7 @@ export const GoogleAuth = async (req, res, next) => {
         .cookie("access_token", token, {
           httpOnly: true
         })
-        .json(rest);
+        .json({ ...rest, token });
     }
   } catch (error) {
     next(error);
