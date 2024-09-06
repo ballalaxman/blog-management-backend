@@ -1,6 +1,7 @@
 import express, { json } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userroute.js";
 import authRoutes from "./routes/authroute.js";
